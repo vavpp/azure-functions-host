@@ -91,6 +91,8 @@ namespace Microsoft.Azure.WebJobs.Script
 
                 loggingBuilder.AddConsoleIfEnabled(context);
 
+                RegisterServiceResolutionLoggingService(loggingBuilder.Services);
+
                 ConfigureApplicationInsights(context, loggingBuilder);
             })
             .ConfigureAppConfiguration((context, configBuilder) =>
@@ -433,6 +435,15 @@ namespace Microsoft.Azure.WebJobs.Script
             services.AddAzureStorageCoreServices();
             services.TryAddSingleton<IAzureStorageProvider, AzureStorageProvider>();
             services.AddAzureStorageBlobs();
+        }
+
+        private static void RegisterServiceResolutionLoggingService(IServiceCollection services)
+        {
+            var envVarValue = Environment.GetEnvironmentVariable("FUNCTIONS_SERVICE_RESOLUTION_LOG_ENABLED");
+            if (!string.IsNullOrWhiteSpace(envVarValue) && envVarValue.Equals("1", StringComparison.OrdinalIgnoreCase))
+            {
+                services.AddSingleton<IHostedService, ServiceResolutionTrackerService>();
+            }
         }
 
         private static void RegisterFileProvisioningService(IHostBuilder builder)
