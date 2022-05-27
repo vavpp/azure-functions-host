@@ -151,10 +151,12 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
                 .Take(1)
                 .Subscribe(SendWorkerInitRequest, HandleWorkerStartStreamError);
 
-            _workerChannelLogger.LogDebug("Initiating Worker Process start up");
+            _workerChannelLogger.LogDebug("Initiat ing Worker Process start up");
             await _rpcWorkerProcess.StartProcessAsync();
             _state = _state | RpcWorkerChannelState.Initializing;
-            await _workerInitTask.Task;
+            await _workerInitTask.Task; // throws TaskCanceledException
+            _ = "hello world";
+            // set result of this task
         }
 
         public async Task<WorkerStatus> GetWorkerStatusAsync()
@@ -812,7 +814,7 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
 
         private void PublishWorkerErrorEvent(Exception exc)
         {
-            _workerInitTask.SetException(exc);
+            _workerInitTask.TrySetException(exc);
             if (_disposing || _disposed)
             {
                 return;

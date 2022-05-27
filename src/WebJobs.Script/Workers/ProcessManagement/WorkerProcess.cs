@@ -32,6 +32,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
         private IHostProcessMonitor _processMonitor;
         private object _syncLock = new object();
 
+        private static int _count = 0;
+
         internal WorkerProcess(IScriptEventManager eventManager, IProcessRegistry processRegistry, ILogger workerProcessLogger, IWorkerConsoleLogSource consoleLogSource, IMetricsLogger metricsLogger, IServiceProvider serviceProvider, bool useStdErrStreamForErrorsOnly = false)
         {
             _processRegistry = processRegistry;
@@ -65,6 +67,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                 Process = CreateWorkerProcess();
                 try
                 {
+                    // crash mid init
                     Process.ErrorDataReceived += (sender, e) => OnErrorDataReceived(sender, e);
                     Process.OutputDataReceived += (sender, e) => OnOutputDataReceived(sender, e);
                     Process.Exited += (sender, e) => OnProcessExited(sender, e);
@@ -148,13 +151,9 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
             try
             {
-                if (Process.ExitCode == WorkerConstants.SuccessExitCode)
+                if (_count == 0)
                 {
-                    Process.WaitForExit();
-                    Process.Close();
-                }
-                else if (Process.ExitCode == WorkerConstants.IntentionalRestartExitCode)
-                {
+                    _count++;
                     HandleWorkerProcessRestart();
                 }
                 else

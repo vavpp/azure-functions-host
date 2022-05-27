@@ -472,6 +472,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers.Rpc
             }
             catch (TaskCanceledException)
             {
+                Console.WriteLine("WorkerError - TaskCanceledException");
                 // Specifically in the "we were torn down while trying to restart" case, we want to catch here and ignore
                 // If we don't catch the exception from an async void method, we'll end up tearing down the entire runtime instead
                 // It's possible we want to catch *all* exceptions and log or ignore here, but taking the minimal change first
@@ -493,6 +494,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers.Rpc
             }
             catch (TaskCanceledException)
             {
+                Console.WriteLine("WorkerRestart - TaskCanceledException");
                 // Specifically in the "we were torn down while trying to restart" case, we want to catch here and ignore
                 // If we don't catch the exception from an async void method, we'll end up tearing down the entire runtime instead
                 // It's possible we want to catch *all* exceptions and log or ignore here, but taking the minimal change first
@@ -567,6 +569,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers.Rpc
                 try
                 {
                     // Issue only one restart at a time.
+                    Console.WriteLine("I SHOULD BE STUCK NOW!");
                     await _startWorkerProcessLock.WaitAsync();
                     // After waiting on the lock (which could take some time), make sure we're not in a disposed state trying to start things up
                     if (_disposing || _disposed)
@@ -585,6 +588,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers.Rpc
                     }
                     catch (TaskCanceledException)
                     {
+                        Console.WriteLine("StartWorkerChannel - TaskCanceledException");
                     }
                 }
             }
