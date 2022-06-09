@@ -11,20 +11,18 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
     {
         private readonly ILogger<SystemConditionProvider> _logger;
         private readonly IEnvironment _environment;
-        private readonly ISystemRuntimeInformation _systemRuntimeInformation;
 
-        public SystemConditionProvider(ILogger<SystemConditionProvider> logger, ISystemRuntimeInformation runtimeInformation, IEnvironment environment)
+        public SystemConditionProvider(ILogger<SystemConditionProvider> logger, IEnvironment environment)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _systemRuntimeInformation = runtimeInformation ?? SystemRuntimeInformation.Instance;
         }
 
         public bool TryCreateCondition(WorkerProfileConditionDescriptor descriptor, out IWorkerProfileCondition condition)
         {
             condition = descriptor.Type switch
             {
-                WorkerConstants.WorkerDescriptionProfileHostPropertyCondition => new HostPropertyCondition(_logger, _systemRuntimeInformation, descriptor),
+                WorkerConstants.WorkerDescriptionProfileHostPropertyCondition => new HostPropertyCondition(_logger, SystemRuntimeInformation.Instance, descriptor),
                 WorkerConstants.WorkerDescriptionProfileEnvironmentCondition => new EnvironmentCondition(_logger, _environment, descriptor),
                 _ => null
             };
