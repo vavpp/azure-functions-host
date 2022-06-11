@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
+using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -10,11 +11,16 @@ using Microsoft.Azure.WebJobs.Script.WebHost.Configuration;
 using Microsoft.Azure.WebJobs.Script.WebHost.Middleware;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using static Microsoft.Azure.WebJobs.Script.EnvironmentSettingNames;
 
 namespace Microsoft.Azure.WebJobs.Script.WebHost
 {
     public static class WebJobsApplicationBuilderExtension
     {
+        // Add these class level variables
+        private static Timer _placeholderTimer;
+        private static IEnvironment _environment;
+
         public static IApplicationBuilder UseWebJobsScriptHost(this IApplicationBuilder builder, IApplicationLifetime applicationLifetime)
         {
             return UseWebJobsScriptHost(builder, applicationLifetime, null);
@@ -96,7 +102,21 @@ namespace Microsoft.Azure.WebJobs.Script.WebHost
             // Ensure the HTTP binding routing is registered after all middleware
             builder.UseHttpBindingRouting(applicationLifetime, routes);
 
+            _environment = environment;
+            _placeholderTimer = new Timer(OnTimedEvent, null, 60000, 60000);
+
             return builder;
+        }
+
+        // Implement a timer callback that updates the environment variables
+        private static void OnTimedEvent(object state)
+        {
+            if (_environment.IsPlaceholderModeEnabled())
+            {
+                Console.WriteLine("Triggering specialization");
+                _environment.SetEnvironmentVariable(AzureWebsitePlaceholderMode, "0");
+                _environment.SetEnvironmentVariable(AzureWebsiteContainerReady, "true");
+            }
         }
     }
 }

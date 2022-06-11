@@ -12,7 +12,7 @@
       // If you have changed target frameworks, make sure to update the program path.
       "program": "${workspaceFolder}/src/WebJobs.Script.WebHost/bin/Debug/net6.0/Microsoft.Azure.WebJobs.Script.WebHost.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/sample/Node",
+      "cwd": "/Users/erijiz/SampleApps/allTheTriggers/",
       "stopAtEntry": false,
       // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
       "serverReadyAction": {
@@ -22,7 +22,14 @@
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AZURE_FUNCTIONS_ENVIRONMENT": "Development",
-        "AzureWebJobsSecretStorageType": "Files"
+        "AzureWebJobsSecretStorageType": "Files",
+        "WEBSITE_PLACEHOLDER_MODE": "1",
+        "WEBSITE_SKU": "Dynamic",
+        "WEBSITE_CONTAINER_READY": "",
+        "HOME": "",
+        "WEBSITE_RUN_FROM_PACKAGE": "",
+        "languageWorkers__node__workerDirectory": "/Users/erijiz/Repos/js-worker/",
+        "languageWorkers__node__arguments": "--inspect",
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
