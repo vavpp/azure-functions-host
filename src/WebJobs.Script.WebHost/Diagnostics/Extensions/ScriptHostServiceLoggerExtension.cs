@@ -64,7 +64,7 @@ namespace Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.Extensions
             LoggerMessage.Define(
                 LogLevel.Warning,
                 new EventId(508, nameof(DidNotShutDown)),
-                "Host did not shutdown within its allotted time.");
+                "Host did not shutdown within its allotted time - 30sec.");
 
         private static readonly Action<ILogger, Exception> _shutDownCompleted =
             LoggerMessage.Define(

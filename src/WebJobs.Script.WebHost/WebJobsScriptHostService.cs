@@ -434,7 +434,7 @@ namespace Microsoft.Azure.WebJobs.Script.WebHost
             var currentHost = ActiveHost;
             ActiveHost = null;
             Task stopTask = Orphan(currentHost, cancellationToken);
-            Task result = await Task.WhenAny(stopTask, Task.Delay(TimeSpan.FromSeconds(20), cancellationToken));
+            Task result = await Task.WhenAny(stopTask, Task.Delay(TimeSpan.FromSeconds(30), cancellationToken));
 
             if (result != stopTask)
             {
