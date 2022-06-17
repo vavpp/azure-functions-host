@@ -214,7 +214,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
                 if (Process != null)
                 {
-                    if (Process != null && !Process.HasExited)
+                    if (!Process.HasExited)
                     {
                         Process.Kill();
                         if (!Process.WaitForExit(processExitTimeoutInMilliseconds))
@@ -222,10 +222,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                             _workerProcessLogger.LogWarning($"Worker process has not exited despite waiting for {processExitTimeoutInMilliseconds} ms");
                         }
                     }
-                    if (Process != null)
-                    {
-                        Process.Dispose();
-                    }
+                    Process.Dispose();
                 }
             }
             catch (Exception exc)
