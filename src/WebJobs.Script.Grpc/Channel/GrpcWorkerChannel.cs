@@ -899,7 +899,7 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
                 WorkerTerminate = workerTerminate
             });
 
-            WaitForGracePeriodInSeconds(WorkerConstants.WorkerTerminateGracePeriodInSeconds);
+            // WaitForGracePeriodInSeconds(WorkerConstants.WorkerTerminateGracePeriodInSeconds);
         }
 
         private void WaitForGracePeriodInSeconds(int gracePeriod)
