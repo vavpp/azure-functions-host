@@ -91,7 +91,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests.EndToEnd
                 timeoutTasks.Add(_fixture.Host.HttpClient.SendAsync(request));
             }
             var results = await Task.WhenAll(timeoutTasks);
-            await Task.Delay(TimeSpan.FromSeconds(20));
+            await Task.Delay(TimeSpan.FromMinutes(1));
             foreach (var timeoutResult in results)
             {
                 Assert.Equal(HttpStatusCode.InternalServerError, timeoutResult.StatusCode);  // Confirm response code after timeout (10 seconds)
