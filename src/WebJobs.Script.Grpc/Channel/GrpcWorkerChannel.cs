@@ -882,6 +882,9 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
         private void StopWorkerProcess()
         {
             bool capabilityEnabled = !string.IsNullOrEmpty(_workerCapabilities.GetCapabilityState(RpcWorkerConstants.HandlesWorkerTerminateMessage));
+
+            Workers.WorkerProcess.WorkerTerminateCapabilityEnabled = capabilityEnabled;
+
             if (!capabilityEnabled)
             {
                 return;

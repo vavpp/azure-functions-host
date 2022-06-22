@@ -42,6 +42,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             _useStdErrorStreamForErrorsOnly = useStdErrStreamForErrorsOnly;
             _serviceProvider = serviceProvider;
 
+            WorkerTerminateCapabilityEnabled = false;
+
             // We subscribe to host start events so we can handle the restart that occurs
             // on host specialization.
             _eventSubscription = _eventManager.OfType<HostStartEvent>().Subscribe(OnHostStart);
@@ -50,6 +52,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
         protected bool Disposing { get; private set; }
 
         public int Id => Process.Id;
+
+        public static bool WorkerTerminateCapabilityEnabled { get; set; }
 
         internal Queue<string> ProcessStdErrDataQueue => _processStdErrDataQueue;
 
@@ -216,10 +220,17 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                 {
                     if (!Process.HasExited)
                     {
-                        if (!Process.WaitForExit(processExitTimeoutInMilliseconds))
+                        if (WorkerTerminateCapabilityEnabled)
+                        {
+                            if (!Process.WaitForExit(processExitTimeoutInMilliseconds))
+                            {
+                                _workerProcessLogger.LogInformation($"Worker process has not exited despite waiting for {processExitTimeoutInMilliseconds} ms");
+                                Process.Kill();
+                            }
+                        }
+                        else
                         {
                             Process.Kill();
-                            _workerProcessLogger.LogWarning($"Worker process has not exited despite waiting for {processExitTimeoutInMilliseconds} ms");
                         }
                     }
                     Process.Dispose();
