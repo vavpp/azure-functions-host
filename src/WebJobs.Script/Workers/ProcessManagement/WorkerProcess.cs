@@ -32,6 +32,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
         private IHostProcessMonitor _processMonitor;
         private object _syncLock = new object();
 
+        private bool _workerTerminateCapabilityEnabled = false;
+
         internal WorkerProcess(IScriptEventManager eventManager, IProcessRegistry processRegistry, ILogger workerProcessLogger, IWorkerConsoleLogSource consoleLogSource, IMetricsLogger metricsLogger, IServiceProvider serviceProvider, bool useStdErrStreamForErrorsOnly = false)
         {
             _processRegistry = processRegistry;
@@ -42,8 +44,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             _useStdErrorStreamForErrorsOnly = useStdErrStreamForErrorsOnly;
             _serviceProvider = serviceProvider;
 
-            WorkerTerminateCapabilityEnabled = false;
-
             // We subscribe to host start events so we can handle the restart that occurs
             // on host specialization.
             _eventSubscription = _eventManager.OfType<HostStartEvent>().Subscribe(OnHostStart);
@@ -52,8 +52,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
         protected bool Disposing { get; private set; }
 
         public int Id => Process.Id;
-
-        public static bool WorkerTerminateCapabilityEnabled { get; set; }
 
         internal Queue<string> ProcessStdErrDataQueue => _processStdErrDataQueue;
 
@@ -208,6 +206,16 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
         internal abstract void HandleWorkerProcessRestart();
 
+        private bool IsWorkerTerminateCapabilityEnabled()
+        {
+            return _workerTerminateCapabilityEnabled;
+        }
+
+        public void SetWorkerTerminateCapability(bool capability)
+        {
+            _workerTerminateCapabilityEnabled = capability;
+        }
+
         public void Dispose()
         {
             Disposing = true;
@@ -220,7 +228,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                 {
                     if (!Process.HasExited)
                     {
-                        if (WorkerTerminateCapabilityEnabled)
+                        if (IsWorkerTerminateCapabilityEnabled())
                         {
                             if (!Process.WaitForExit(processExitTimeoutInMilliseconds))
                             {
