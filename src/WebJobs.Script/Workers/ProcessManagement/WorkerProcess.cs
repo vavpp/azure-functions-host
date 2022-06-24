@@ -204,6 +204,17 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
         internal abstract void HandleWorkerProcessRestart();
 
+        public void StopProcessGracefully()
+        {
+            if (Process != null)
+            {
+                if (!Process.WaitForExit(WorkerConstants.WorkerTerminateGracePeriodInSeconds * 1000))
+                {
+                    _workerProcessLogger.LogInformation($"Worker process has not exited despite waiting for {WorkerConstants.WorkerTerminateGracePeriodInSeconds} seconds");
+                }
+            }
+        }
+
         public void Dispose()
         {
             Disposing = true;
