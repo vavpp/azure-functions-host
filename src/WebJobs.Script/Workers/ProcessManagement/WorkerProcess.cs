@@ -222,11 +222,10 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             try
             {
                 _eventSubscription?.Dispose();
+                _processRegistry.Close();
 
                 if (Process != null)
                 {
-                    _processRegistry.Close();
-
                     if (!Process.HasExited)
                     {
                         Process.Kill();
@@ -238,17 +237,11 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                     }
                     Process.Dispose();
                 }
-
-                _processRegistry.Close();
             }
             catch (Exception exc)
             {
                 _workerProcessLogger?.LogDebug(exc, "Exception on worker disposal.");
                 //ignore
-            }
-            finally
-            {
-                _processRegistry.Close();
             }
         }
 
