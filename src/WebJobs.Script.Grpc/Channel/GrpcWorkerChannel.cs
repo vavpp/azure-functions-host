@@ -887,7 +887,6 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
                 return;
             }
 
-
             var workerTerminate = new WorkerTerminate()
             {
                 GracePeriod = Duration.FromTimeSpan(TimeSpan.FromSeconds(WorkerConstants.WorkerTerminateGracePeriodInSeconds))
