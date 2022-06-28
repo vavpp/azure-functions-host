@@ -225,6 +225,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
                 if (Process != null)
                 {
+                    _processRegistry.Close();
+
                     if (!Process.HasExited)
                     {
                         Process.Kill();
