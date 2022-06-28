@@ -237,8 +237,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                     }
                     Process.Dispose();
                 }
-                _processRegistry.Close();
 
+                _processRegistry.Close();
             }
             catch (Exception exc)
             {
