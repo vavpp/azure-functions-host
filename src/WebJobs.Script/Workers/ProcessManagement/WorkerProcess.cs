@@ -230,7 +230,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                     if (!Process.HasExited)
                     {
                         Process.Kill();
-                        _processRegistry.Close();
 
                         if (!Process.WaitForExit(processExitTimeoutInMilliseconds))
                         {
