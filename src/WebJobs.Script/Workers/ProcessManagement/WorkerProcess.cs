@@ -253,6 +253,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             {
                 _processRegistry.Close();
                 _disposed = true;
+                _workerProcessLogger.LogWarning($"Disposed {_disposed}");
             }
         }
 
