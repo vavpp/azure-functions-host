@@ -170,7 +170,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests
 
             HttpClient = _testServer.CreateClient();
             HttpClient.Timeout = TimeSpan.FromMinutes(5);
-
+            // HttpClient.BaseAddress = new Uri("https://surg-net-test12.azurewebsites.net/");
             var manager = _testServer.Host.Services.GetService<IScriptHostManager>();
             _hostService = manager as WebJobsScriptHostService;
 

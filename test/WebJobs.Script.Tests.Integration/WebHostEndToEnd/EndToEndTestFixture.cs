@@ -293,6 +293,9 @@ namespace Microsoft.Azure.WebJobs.Script.Tests
             Environment.SetEnvironmentVariable(RpcWorkerConstants.FunctionWorkerRuntimeSettingName, string.Empty);
             Environment.SetEnvironmentVariable(RpcWorkerConstants.FunctionsWorkerProcessCountSettingName, string.Empty);
             Environment.SetEnvironmentVariable(RpcWorkerConstants.FunctionWorkerRuntimeVersionSettingName, string.Empty);
+
+            Task.Delay(TimeSpan.FromMinutes(1)).GetAwaiter().GetResult();
+
             return Task.CompletedTask;
         }
 

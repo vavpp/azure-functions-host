@@ -25,7 +25,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests.EndToEnd
             string body = await response.Content.ReadAsStringAsync();
             Assert.Equal("text/plain", response.Content.Headers.ContentType.MediaType);
             Assert.Equal("Hello Mathew", body);
-
+            await Task.Delay(System.TimeSpan.FromSeconds(10));
             // verify request also succeeds with master key
             string masterKey = await fixture.Host.GetMasterKeyAsync();
             uri = $"api/{functionName}?code={masterKey}&name=Mathew";

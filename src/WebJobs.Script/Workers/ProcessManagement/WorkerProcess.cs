@@ -26,7 +26,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
         private readonly int processExitTimeoutInMilliseconds = 1000;
         private readonly IServiceProvider _serviceProvider;
         private readonly IDisposable _eventSubscription;
-        private bool _disposed = false;
 
         private bool _useStdErrorStreamForErrorsOnly;
         private Queue<string> _processStdErrDataQueue = new Queue<string>(3);
@@ -226,9 +225,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
                 if (Process != null)
                 {
-                    _processRegistry.Close();
-                    _disposed = true;
-
                     if (!Process.HasExited)
                     {
                         Process.Kill();
@@ -240,9 +236,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
                     }
                     Process.Dispose();
                 }
-
-                _processRegistry.Close();
-                _disposed = true;
             }
             catch (Exception exc)
             {
@@ -252,8 +245,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             finally
             {
                 _processRegistry.Close();
-                _disposed = true;
-                _workerProcessLogger.LogWarning($"Disposed {_disposed}");
             }
         }
 
