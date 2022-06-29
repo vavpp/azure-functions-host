@@ -225,6 +225,8 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             try
             {
                 _eventSubscription?.Dispose();
+                _processRegistry.Close();
+                _disposed = true;
 
                 if (Process != null)
                 {
