@@ -423,6 +423,8 @@ namespace Microsoft.Azure.WebJobs.Script.Tests
 
                 _isDisposed = true;
             }
+
+            Task.Delay(TimeSpan.FromMinutes(1)).GetAwaiter().GetResult();
         }
 
         private async Task<bool> IsHostStarted()

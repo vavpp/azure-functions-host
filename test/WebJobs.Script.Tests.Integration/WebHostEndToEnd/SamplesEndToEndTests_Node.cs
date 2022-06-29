@@ -185,7 +185,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests.EndToEnd
             var product = products[0];
             Assert.Equal("electronics", (string)product["category"]);
             Assert.Equal(id, (string)product["id"]);
-            await Task.Delay(System.TimeSpan.FromMinutes(1));
+            //await Task.Delay(System.TimeSpan.FromMinutes(1));
 
             // test optional route param (id)
             uri = $"api/node/products/electronics?code={functionKey}";
@@ -307,7 +307,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests.EndToEnd
             IEnumerable<int> nodeProcessesBefore = Process.GetProcessesByName("node").Select(p => p.Id);
             // Trigger a restart
             await _fixture.Host.RestartAsync(CancellationToken.None);
-            await Task.Delay(TimeSpan.FromMinutes(1));
+            //await Task.Delay(TimeSpan.FromMinutes(1));
 
             await HttpTrigger_Get_Succeeds();
             // wait for orphaned jobhost instance to be disposed
@@ -330,7 +330,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests.EndToEnd
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
             HttpResponseMessage response = await _fixture.Host.HttpClient.SendAsync(request);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-            await Task.Delay(System.TimeSpan.FromMinutes(1));
+            //await Task.Delay(System.TimeSpan.FromMinutes(1));
             // now try with admin key
             string masterKey = await _fixture.Host.GetMasterKeyAsync();
             uri = $"api/httptrigger-disabled?code={masterKey}";
