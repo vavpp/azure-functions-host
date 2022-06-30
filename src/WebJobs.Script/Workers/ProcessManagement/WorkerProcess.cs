@@ -32,7 +32,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
         private Queue<string> _processStdErrDataQueue = new Queue<string>(3);
         private IHostProcessMonitor _processMonitor;
         private object _syncLock = new object();
-        private bool _disposed = false;
 
         internal WorkerProcess(IScriptEventManager eventManager, IProcessRegistry processRegistry, ILogger workerProcessLogger, IWorkerConsoleLogSource consoleLogSource, IMetricsLogger metricsLogger, IServiceProvider serviceProvider, bool useStdErrStreamForErrorsOnly = false)
         {
@@ -226,7 +225,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             {
                 _eventSubscription?.Dispose();
                 _processRegistry.Close();
-                _disposed = true;
 
                 if (Process != null)
                 {
@@ -250,8 +248,6 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             finally
             {
                 _processRegistry.Close();
-                _disposed = true;
-                _workerProcessLogger?.LogDebug($"disposed = {_disposed}");
             }
         }
 
