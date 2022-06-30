@@ -247,6 +247,7 @@ namespace Microsoft.Azure.WebJobs.Script.Tests
         public async Task RestartAsync(CancellationToken cancellationToken)
         {
             await _hostService.RestartHostAsync(cancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(15));
         }
 
         private void StillRunningCallback(object state)
