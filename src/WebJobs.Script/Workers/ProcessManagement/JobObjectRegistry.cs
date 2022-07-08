@@ -11,7 +11,7 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
     internal class JobObjectRegistry : IProcessRegistry //, IDisposable
     {
         private IntPtr _handle;
-        private bool _disposed = false;
+        //private bool _disposed = false;
 
         public JobObjectRegistry()
         {
@@ -80,10 +80,12 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
 
         public void Close()
         {
+            /*
             if (_disposed)
             {
                 return;
             }
+            */
 
             if (_handle != IntPtr.Zero)
             {
@@ -91,8 +93,10 @@ namespace Microsoft.Azure.WebJobs.Script.Workers
             }
             _handle = IntPtr.Zero;
 
+            /*
             _disposed = true;
             GC.SuppressFinalize(this);
+            */
         }
     }
 
