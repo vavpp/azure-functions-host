@@ -513,8 +513,8 @@ namespace Microsoft.Azure.WebJobs.Script.WebHost
                         }
                         else
                         {
-                            stopTask = Orphan(previousHost, cancellationToken);
                             startTask = UnsynchronizedStartHostAsync(activeOperation);
+                            stopTask = Orphan(previousHost, cancellationToken);
                         }
 
                         await startTask;
