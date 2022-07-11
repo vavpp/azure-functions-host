@@ -862,12 +862,7 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
                 {
                     _startLatencyMetric?.Dispose();
                     _startSubscription?.Dispose();
-                    bool? a = _workerInitTask?.TrySetCanceled();
-                    if (a != null && a == false)
-                    {
-                        _workerInitTask?.SetCanceled();
-                    }
-
+                    _workerInitTask?.TrySetCanceled();
                     _timer?.Dispose();
 
                     // unlink function inputs
