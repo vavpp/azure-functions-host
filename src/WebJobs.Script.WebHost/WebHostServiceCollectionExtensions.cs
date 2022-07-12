@@ -34,6 +34,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Microsoft.Azure.WebJobs.Script.WebHost
 {
@@ -81,6 +82,8 @@ namespace Microsoft.Azure.WebJobs.Script.WebHost
             })
             .AddNewtonsoftJson()
             .AddXmlDataContractSerializerFormatters();
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
 
             // Standby services
             services.AddStandbyServices();
