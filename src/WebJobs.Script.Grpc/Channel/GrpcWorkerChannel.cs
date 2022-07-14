@@ -496,15 +496,16 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
 
                 if (context.CancellationToken.IsCancellationRequested)
                 {
+                    // add logs
                     context.ResultSource.SetCanceled();
                     return;
                 }
 
-                // context.CancellationToken.Register
-
                 var invocationRequest = await context.ToRpcInvocationRequest(_workerChannelLogger, _workerCapabilities, _isSharedMemoryDataTransferEnabled, _sharedMemoryManager);
                 AddAdditionalTraceContext(invocationRequest.TraceContext.Attributes, context);
                 _executingInvocations.TryAdd(invocationRequest.InvocationId, context);
+
+                context.CancellationToken.Register(() => SendInvocationCancel(invocationRequest.InvocationId));
 
                 SendStreamingMessage(new StreamingMessage
                 {
@@ -517,7 +518,7 @@ namespace Microsoft.Azure.WebJobs.Script.Grpc
             }
         }
 
-        internal void SendInvocationCancel(string invocationId, CancellationToken ct)
+        internal void SendInvocationCancel(string invocationId)
         {
             bool capabilityEnabled = !string.IsNullOrEmpty(_workerCapabilities.GetCapabilityState(RpcWorkerConstants.HandlesInvocationCancelMessage));
             if (!capabilityEnabled)
