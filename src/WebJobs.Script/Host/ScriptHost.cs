@@ -297,7 +297,7 @@ namespace Microsoft.Azure.WebJobs.Script
                         // Windows Consumption as well.
                         string runtimeVersion = _environment.GetEnvironmentVariable(RpcWorkerConstants.FunctionWorkerRuntimeVersionSettingName);
 
-                        // If the environemt is multi language, we are running multiple language worker, and thus not honoring 'FUNCTIONS_WORKER_RUNTIME_VERSION'
+                        // If the environment is multi language, we are running multiple language workers, and thus not honoring 'FUNCTIONS_WORKER_RUNTIME_VERSION'
                         if (!string.IsNullOrEmpty(runtimeVersion) && !_environment.IsMultiLanguageRuntimeEnvironment())
                         {
                             runtimeStack = string.Concat(runtimeStack, "-", runtimeVersion);
